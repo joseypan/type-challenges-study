@@ -6,10 +6,12 @@ type CustomFlatten<T extends any[], D extends any[] = []> = [
   ...T,
   ...D,
 ] extends [infer start, ...infer other]
-  ? start extends [infer a]
+  ? start extends any[]
     ? [...CustomFlatten<start>, ...CustomFlatten<other>]
     : [start, ...CustomFlatten<other>]
   : T
 // extends [infer start,...infer other]?start extends []?[CustomFlatten<start>,...CustomFlatten<other>]:[start,...CustomFlatten<other>]:T
 type TestFlatten = CustomFlatten<[{ foo: 'bar'; 2: 10 }, 'foobar']>
 type TestFlatten1 = CustomFlatten<[1, 2, [3, 4], [[[5]]]]>
+// type TestInfer<X extends any[]> = X extends any[] ? true: false;
+// type TestInferIns = TestInfer<[3,4]>
