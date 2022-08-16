@@ -3,11 +3,11 @@
 // 2、根据类型可知，参数一传入的是字符串，类型二传入的是字符串数组，类型三传入的也是字符串数组
 // 3、我们需要将类型转成联合类型，联合类型可以通过数组遍历进行拼接生成
 // 4、那问题是否可以回到遍历M,然后进行拼接？当前测试用例来看E至多只有一项，但要实现通用性，应该是都要考虑的
-type CustomBEM<
-  B extends string,
-  E extends string[],
-  M extends string[],
-> = TupleToUnion<CombineStr<B, E, M>>
+// type CustomBEM<
+//   B extends string,
+//   E extends string[],
+//   M extends string[],
+// > = TupleToUnion<CombineStr<B, E, M>>
 /*
  * 描述：遍历最后一项数组，以最后一项数组为遍历条件，若不是数组则表示已经遍历完，直接返回[]
  *      主要是以遍历M
@@ -52,3 +52,12 @@ type CustomBEM<
 // type TestCustomBEM = ['123'] extends [infer start, ...infer other]
 //   ? true
 //   : false
+// 【优化】这样的书写方式过于复杂了，查看相应issue查看是否有简便方法
+type CustomBEM<
+  B extends string,
+  E extends string[],
+  M extends string[],
+> = `${B}${E extends [] ? '' : `__${E[number]}`}${M extends []
+  ? ''
+  : `--${M[number]}`}`
+type TestCustomBEM = CustomBEM<'test', ['string', 'string1'], ['new']>
